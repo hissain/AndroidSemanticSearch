@@ -1,4 +1,4 @@
-# Android Vector Search Sample App
+# Android Semantic Search Sample App
 
 This sample app demonstrates how to implement vector search with embeddings for English keywords in an Android application using Java.
 
