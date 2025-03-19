@@ -12,9 +12,10 @@ This sample app demonstrates how to implement vector search with embeddings for 
 
 ## Requirements
 
-- Android Studio 4.2+
-- Android SDK 23+ (Android 6.0 or higher)
+- Android Studio 2024
+- Android SDK 30+ (Android 11.0 or higher)
 - JDK 8+
+- Tested with Samsung S-24
 
 ## Setup Instructions
 
@@ -65,3 +66,9 @@ This sample uses the MiniLM-L6-v2 model which creates 384-dimensional embeddings
   - Implementing asynchronous data loading
   - Adding caching mechanisms for embeddings
   - Storing the vector database persistently
+
+## Contact
+
+Authors email: hissain.khan@gmail.com
+
+Thanks
