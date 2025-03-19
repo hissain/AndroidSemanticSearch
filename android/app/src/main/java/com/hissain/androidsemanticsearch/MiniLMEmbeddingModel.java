@@ -6,11 +6,12 @@ import org.tensorflow.lite.Interpreter;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MiniLMEmbeddingModel implements EmbeddingModel {
     private static final int MAX_SEQ_LENGTH = 128;
@@ -34,24 +35,46 @@ public class MiniLMEmbeddingModel implements EmbeddingModel {
             attentionMask[i] = inputIds[i] != 0 ? 1 : 0;
         }
 
-        // Prepare input for the model
-        Object[] inputs = new Object[2];
-        inputs[0] = new int[1][MAX_SEQ_LENGTH];
-        inputs[1] = new int[1][MAX_SEQ_LENGTH];
+        // Create input tensors
+        ByteBuffer inputIdsBuffer = ByteBuffer.allocateDirect(MAX_SEQ_LENGTH * 4);
+        inputIdsBuffer.order(ByteOrder.nativeOrder());
+        ByteBuffer attentionMaskBuffer = ByteBuffer.allocateDirect(MAX_SEQ_LENGTH * 4);
+        attentionMaskBuffer.order(ByteOrder.nativeOrder());
 
+        // Fill input buffers
         for (int i = 0; i < MAX_SEQ_LENGTH; i++) {
-            ((int[][])inputs[0])[0][i] = inputIds[i];
-            ((int[][])inputs[1])[0][i] = attentionMask[i];
+            inputIdsBuffer.putInt(inputIds[i]);
+            attentionMaskBuffer.putInt(attentionMask[i]);
         }
 
-        // Prepare output buffer
-        float[][][] outputs = new float[1][1][EMBEDDING_DIM];
+        // Reset position to start
+        inputIdsBuffer.rewind();
+        attentionMaskBuffer.rewind();
+
+        // Create output buffer
+        ByteBuffer outputBuffer = ByteBuffer.allocateDirect(EMBEDDING_DIM * 4);
+        outputBuffer.order(ByteOrder.nativeOrder());
+
+        // Set up input and output maps
+        Map<Integer, Object> inputs = new HashMap<>();
+        inputs.put(0, inputIdsBuffer);
+        inputs.put(1, attentionMaskBuffer);
+
+        Map<Integer, Object> outputs = new HashMap<>();
+        outputs.put(0, outputBuffer);
 
         // Run inference
-        interpreter.run(inputs, outputs);
+//        interpreter.run(inputs, outputs);
+        interpreter.runForMultipleInputsOutputs(new Object[]{inputIdsBuffer, attentionMaskBuffer}, outputs);
 
-        // Return the embedding (CLS token)
-        return outputs[0][0];
+        // Extract results
+        outputBuffer.rewind();
+        float[] embeddings = new float[EMBEDDING_DIM];
+        for (int i = 0; i < EMBEDDING_DIM; i++) {
+            embeddings[i] = outputBuffer.getFloat();
+        }
+
+        return embeddings;
     }
 
     private MappedByteBuffer loadModelFile(Context context, String modelFileName) throws IOException {
