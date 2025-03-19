@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BertTokenizer {
-    private static final String VOCAB_FILE = "bert_vocab.txt";
+    private static final String VOCAB_FILE = "bert_uncased_vocab.txt";
     private static final String UNK_TOKEN = "[UNK]";
     private static final String CLS_TOKEN = "[CLS]";
     private static final String SEP_TOKEN = "[SEP]";

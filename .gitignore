@@ -2,6 +2,8 @@
 .gradle/
 build/
 
+.venv/
+
 # Local configuration file (sdk path, etc)
 local.properties
 

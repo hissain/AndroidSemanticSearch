@@ -26,10 +26,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    aaptOptions {
-        noCompress = "tflite"
+    androidResources {
+        noCompress 'tflite'
     }
+    buildFeatures {
+        mlModelBinding true
+    }
+
 }
 
 dependencies {
@@ -45,6 +48,9 @@ dependencies {
     // Apache Lucene for vector search
     implementation 'org.apache.lucene:lucene-core:9.0.0'
     implementation 'org.apache.lucene:lucene-analysis-common:9.0.0'
+    implementation libs.tensorflow.lite.support
+    implementation libs.tensorflow.lite.metadata
+    implementation libs.tensorflow.lite.gpu
 
     // Testing
     testImplementation 'junit:junit:4.13.2'
