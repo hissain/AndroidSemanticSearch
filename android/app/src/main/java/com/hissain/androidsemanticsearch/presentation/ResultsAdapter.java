@@ -1,9 +1,12 @@
-package com.hissain.androidsemanticsearch;
+package com.hissain.androidsemanticsearch.presentation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.hissain.androidsemanticsearch.R;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 

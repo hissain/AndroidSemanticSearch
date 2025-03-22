@@ -1,15 +1,19 @@
 package com.hissain.androidsemanticsearch;
 
 import android.content.Context;
+
+import com.hissain.androidsemanticsearch.interfaces.Tokenizer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BertTokenizer {
+public class BertTokenizer implements Tokenizer {
     private static final String VOCAB_FILE = "bert_uncased_vocab.txt";
     private static final String UNK_TOKEN = "[UNK]";
     private static final String CLS_TOKEN = "[CLS]";

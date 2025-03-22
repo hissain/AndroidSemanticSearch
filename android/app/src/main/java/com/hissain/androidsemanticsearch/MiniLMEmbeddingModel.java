@@ -2,6 +2,9 @@ package com.hissain.androidsemanticsearch;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+
+import com.hissain.androidsemanticsearch.interfaces.EmbeddingModel;
+
 import org.tensorflow.lite.Interpreter;
 
 import java.io.FileInputStream;

@@ -1,10 +1,12 @@
-package com.hissain.androidsemanticsearch;
+package com.hissain.androidsemanticsearch.lucene;
+
+import com.hissain.androidsemanticsearch.presentation.SearchResult;
+import com.hissain.androidsemanticsearch.interfaces.VectorDatabase;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.KnnVectorField;
-import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;

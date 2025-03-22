@@ -1,4 +1,6 @@
-package com.hissain.androidsemanticsearch;
+package com.hissain.androidsemanticsearch.interfaces;
+
+import com.hissain.androidsemanticsearch.presentation.SearchResult;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,10 +1,19 @@
-package com.hissain.androidsemanticsearch;
+package com.hissain.androidsemanticsearch.presentation;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.hissain.androidsemanticsearch.DocumentItem;
+import com.hissain.androidsemanticsearch.MiniLMEmbeddingModel;
+import com.hissain.androidsemanticsearch.R;
+import com.hissain.androidsemanticsearch.interfaces.EmbeddingModel;
+import com.hissain.androidsemanticsearch.interfaces.VectorDatabase;
+import com.hissain.androidsemanticsearch.lucene.LuceneVectorDatabase;
+import com.hissain.androidsemanticsearch.objectbox.ObjectBoxVectorDatabase;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,38 +70,31 @@ public class MainActivity extends AppCompatActivity {
         statusText.setText("Initializing models...");
         searchButton.setEnabled(false);
 
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Initialize the embedding model
-                    embeddingModel = new MiniLMEmbeddingModel(getApplicationContext());
+        executor.execute(() -> {
+            try {
+                embeddingModel = new MiniLMEmbeddingModel(getApplicationContext());
 
-                    // Initialize and populate the vector database with sample data
-                    vectorDatabase = new LuceneVectorDatabase();
-                    List<DocumentItem> sampleData = generateSampleData();
+                // Initialize and populate the vector database with sample data
+                // vectorDatabase = new LuceneVectorDatabase();
 
-                    for (DocumentItem item : sampleData) {
-                        float[] embedding = embeddingModel.generateEmbedding(item.getContent());
-                        vectorDatabase.addDocument(item.getId(), item.getContent(), embedding);
-                    }
+                vectorDatabase = new ObjectBoxVectorDatabase(getApplicationContext());
+                List<DocumentItem> sampleData = generateSampleData();
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusText.setText("Ready to search");
-                            searchButton.setEnabled(true);
-                        }
-                    });
-                } catch (IOException e) {
-                    final String errorMessage = "Error initializing models: " + e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusText.setText(errorMessage);
-                        }
-                    });
+                for (DocumentItem item : sampleData) {
+                    float[] embedding = embeddingModel.generateEmbedding(item.getContent());
+                    vectorDatabase.addDocument(item.getId(), item.getContent(), embedding);
                 }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        statusText.setText("Ready to search");
+                        searchButton.setEnabled(true);
+                    }
+                });
+            } catch (IOException e) {
+                final String errorMessage = "Error initializing models: " + e.getMessage();
+                runOnUiThread(() -> statusText.setText(errorMessage));
             }
         });
     }
@@ -101,31 +103,22 @@ public class MainActivity extends AppCompatActivity {
         statusText.setText("Searching...");
         searchButton.setEnabled(false);
 
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    float[] queryEmbedding = embeddingModel.generateEmbedding(query);
-                    List<SearchResult> results = vectorDatabase.search(queryEmbedding, 5);
+        executor.execute(() -> {
+            try {
+                float[] queryEmbedding = embeddingModel.generateEmbedding(query);
+                List<SearchResult> results = vectorDatabase.search(queryEmbedding, 5);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            resultsAdapter.updateResults(results);
-                            statusText.setText("Found " + results.size() + " results");
-                            searchButton.setEnabled(true);
-                        }
-                    });
-                } catch (IOException e) {
-                    final String errorMessage = "Error during search: " + e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusText.setText(errorMessage);
-                            searchButton.setEnabled(true);
-                        }
-                    });
-                }
+                runOnUiThread(() -> {
+                    resultsAdapter.updateResults(results);
+                    statusText.setText("Found " + results.size() + " results");
+                    searchButton.setEnabled(true);
+                });
+            } catch (IOException e) {
+                final String errorMessage = "Error during search: " + e.getMessage();
+                runOnUiThread(() -> {
+                    statusText.setText(errorMessage);
+                    searchButton.setEnabled(true);
+                });
             }
         });
     }

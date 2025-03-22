@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'io.objectbox'
 }
 
 android {
@@ -36,6 +37,7 @@ android {
 }
 
 dependencies {
+
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
@@ -51,6 +53,11 @@ dependencies {
     implementation libs.tensorflow.lite.support
     implementation libs.tensorflow.lite.metadata
     implementation libs.tensorflow.lite.gpu
+
+    // ObjectBox
+    implementation 'io.objectbox:objectbox-java:4.0.1'
+    implementation 'io.objectbox:objectbox-android:4.0.1'
+    annotationProcessor 'io.objectbox:objectbox-processor:4.0.1'
 
     // Testing
     testImplementation 'junit:junit:4.13.2'

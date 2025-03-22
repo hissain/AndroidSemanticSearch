@@ -1,4 +1,4 @@
-package com.hissain.androidsemanticsearch;
+package com.hissain.androidsemanticsearch.presentation;
 
 public class SearchResult {
     private String id;
