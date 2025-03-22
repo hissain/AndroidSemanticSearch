@@ -8,7 +8,7 @@ This sample app demonstrates how to implement vector search with embeddings for 
 - Performs semantic search using vector similarity
 - Displays search results in a sorted list based on relevance
 - Uses MiniLM as the embedding model
-- Uses Apache Lucene for vector search capabilities
+- Uses ObjectBox and alternative Apache Lucene for vector search capabilities
 
 ## Requirements
 
@@ -41,21 +41,23 @@ This sample uses the MiniLM-L6-v2 model which creates 384-dimensional embeddings
 3. **BertTokenizer**: Simple tokenizer for processing text input
 4. **VectorDatabase**: Interface for vector database operations
 5. **LuceneVectorDatabase**: Implementation using Apache Lucene's KNN vector search
-6. **MainActivity**: Main UI for the application
-7. **ResultsAdapter**: Adapter for displaying search results
+6. **ObjectBoxVectorDatabase**: Implementation using ObjectBox vector search
+7. **MainActivity**: Main UI for the application
+8. **ResultsAdapter**: Adapter for displaying search results
 
 ### How It Works
 
 1. The app initializes the embedding model and vector database on startup
 2. Sample text documents are added to the database with their vector embeddings
 3. When a user enters a search query, it's converted to an embedding vector
-4. The app performs a KNN vector search to find the most semantically similar documents
-5. Results are displayed in a RecyclerView sorted by similarity score
+4. The app performs ObjectBox or Lucene KNN vector search to find the most semantically similar documents
+6. Results are displayed in a RecyclerView sorted by similarity score
 
 ## Dependencies
 
 - **TensorFlow Lite**: For running the embedding model
 - **Apache Lucene**: For vector search capabilities
+- **ObjectBox**: For alternative vector search capabilities
 - **AndroidX**: For UI components and RecyclerView
 
 ## Notes
@@ -69,6 +71,7 @@ This sample uses the MiniLM-L6-v2 model which creates 384-dimensional embeddings
 
 ## Contact
 
+You can contribute to this project by pull request.
 Authors email: hissain.khan@gmail.com
 
 Thanks
