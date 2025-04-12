@@ -1,9 +1,9 @@
 # Gradle files
 .gradle/
 build/
-
+python/checkpoints/*
 .venv/
-
+python/fine_tuned_minilm/*
 # Local configuration file (sdk path, etc)
 local.properties
 
